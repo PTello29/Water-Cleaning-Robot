@@ -288,12 +288,20 @@ The simulation evaluates the robot's performance by estimating its energy usage 
 - Energy consumed: **77.09 units**
 
 ### *2nd Attempt*
+
+![Energía gastada en la primera basura](/images/2.jpg)
+
 - Energy consumed: **123.17 units**
 
 ### *3rd Attempt*
+
+![Energía gastada en la primera basura](/images/3.jpg)
+
 - Energy consumed: **77.78 units**
 
 **Average energy consumption:** **92.68 units**
+
+![Energía gastada en la primera basura](/images/4.jpg)
 
 ## Justification
 
