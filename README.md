@@ -316,14 +316,13 @@ As can be seen in the graph, the angular adjustment (red) increases at first and
 
 ## Conclusions
 
-This simulation project demonstrated how a virtual robot can be programmed to perform waste removal tasks efficiently in a controlled environment. By using energy usage as the main evaluation criterion, we introduced a performance perspective focused on sustainability and real-world constraints.
+This simulation project demonstrated that it is possible to efficiently model environmental cleaning behaviors with a virtual robot, using accessible tools such as ROS and Turtlesim. By simulating floating litter collection tasks in a controlled environment, the basic principles of navigation, perception, and actuation found in real-life aquatic cleaning robots were successfully replicated. The choice of using energy consumption as the primary metric allowed performance to be evaluated not only in terms of functional success but also from a sustainability perspective, an essential consideration in real-world applications.
 
-Key lessons include:
+One of the key observations was the significant impact that the robot's initial orientation has on energy expenditure. While the distance to the target influences the total energy consumed, sharp turns and angular corrections generate a considerable load. This finding highlights the importance of navigation strategies that prioritize efficient alignment before moving forward, which could be extrapolated to real-life autonomous systems operating in energy-constrained environments, such as polluted rivers or hard-to-reach coastal areas.
 
-- Proportional control significantly reduces unnecessary movements.  
-- Angular misalignment plays a larger role in energy inefficiency than distance.  
+In addition to the technical benefits, this type of simulation contributes to academic training in robotics and programming, offering a safe platform for experimenting with fundamental concepts such as proportional control, ROS service management, and motion planning. Integrating this project into educational environments allows students to gain a practical understanding of how robotics can be applied to real-world environmental problems, fostering a critical and proactive mindset toward using technology for the benefit of the planet.
 
-Future work may include introducing obstacles, dynamic targets, or even reinforcement learning techniques to further improve performance.
+Finally, the work opens several avenues for improvement. These include the possibility of incorporating obstacles into the environment, simulating water currents that move waste, or even implementing reinforcement learning algorithms that allow the robot to optimize its routes based on experience. These advances would not only increase the complexity and realism of the system but would also bring this type of simulation closer to the development of effective robotic solutions for protecting aquatic ecosystems in the real world.
 
 ## References
 
