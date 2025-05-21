@@ -74,7 +74,7 @@ class EnergyRobot:
         vel = Twist()
         rate = rospy.Rate(10)
         step_size = 1.0  # Tamaño del paso en cada dirección
-        directions = [(0, step_size), (step_size, 0), (0, -step_size)]  # Arriba, derecha, abajo
+        directions = [(0, step_size), (step_size, 0), (0, -step_size), (-step_size, 0)]  # Arriba, derecha, abajo, izquierda
         energy = 0.0
         start_time = time.perf_counter()
 
@@ -82,9 +82,26 @@ class EnergyRobot:
             target_x = self.pose.x + dx
             target_y = self.pose.y + dy
 
+            # Calcular el ángulo hacia el objetivo
+            angle_to_target = atan2(dy, dx)
+
+            # Girar hacia el ángulo deseado
+            while not rospy.is_shutdown():
+                angle_error = angle_to_target - self.pose.theta
+                angle_error = (angle_error + pi) % (2 * pi) - pi  # Normalizar el ángulo
+
+                if abs(angle_error) < 0.1:  # Si el error angular es pequeño, detener la rotación
+                    break
+
+                vel.linear.x = 0.0
+                vel.angular.z = 2.0 * angle_error  # Control proporcional para girar
+                self.vel_pub.publish(vel)
+                rate.sleep()
+
+            # Moverse hacia el objetivo
             while not rospy.is_shutdown():
                 dist = sqrt((target_x - self.pose.x)**2 + (target_y - self.pose.y)**2)
-                if dist < 0.1:
+                if dist < 0.1:  # Si está cerca del objetivo, detenerse
                     break
 
                 vel.linear.x = 0.5  # Velocidad constante
@@ -95,6 +112,7 @@ class EnergyRobot:
                 energy += pow(vel.linear.x, 2)
                 rate.sleep()
 
+        # Detener la tortuga al final del patrón
         vel.linear.x = 0
         vel.angular.z = 0
         self.vel_pub.publish(vel)
