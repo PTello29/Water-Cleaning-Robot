@@ -5,4 +5,7 @@
 
     <!-- Lanzar el script teleop.py del paquete Practicas_lab -->
     <node pkg="practicas_lab" type="water_robot.py" name="water_robot_node" output="screen"/>
+
+    <!-- Lanzar el script teleop.py del paquete Practicas_lab -->
+    <node pkg="practicas_lab" type="water_robot2.py" name="water_robot2_node" output="screen"/>
 </launch>
