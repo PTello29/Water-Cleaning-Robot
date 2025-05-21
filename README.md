@@ -58,6 +58,7 @@ This allows us to assess how efficiently the robot completes its task.
 ## Code Implementation and Explanation
 
 ```python
+#!/usr/bin/env python3
 import rospy, time, random
 from math import atan2, sqrt, pow, pi
 from turtlesim.srv import Spawn, Kill, TeleportAbsolute, SetPen
@@ -89,6 +90,7 @@ class EnergyRobot:
         x = random.uniform(2.0, 10.0)
         y = random.uniform(2.0, 10.0)
         self.spawn(x, y, 0, 'trash')
+        print(f"Trash spawned at position: x={x:.2f}, y={y:.2f}")  # Nuevo mensaje
         return (x, y)
 
     def move_to(self, x_goal, y_goal):
