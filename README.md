@@ -310,6 +310,8 @@ Variation in energy use is primarily influenced by two factors:
 - **Initial orientation** relative to the waste location
 - **Distance** from the robot's starting point
 
+![Energía gastada en la primera basura](/images/5.jpg)
+
 Shorter distances and near-perfect initial alignment result in lower energy usage. Higher angular corrections and longer paths significantly increase energy consumption.
 
 This demonstrates the importance of efficient orientation and accurate path planning in autonomous systems, especially when energy optimization is a priority.
