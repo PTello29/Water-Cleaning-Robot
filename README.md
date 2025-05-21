@@ -1,4 +1,4 @@
-# Water-Cleaning Robot – Turtlesim Simulation
+# Water-Cleaning Robot Physic and Simulation Metrics
 
 ## Introduction
 
@@ -10,7 +10,16 @@ This simulation is not only a technical experiment but also a conceptual contrib
 
 Projects like this highlight the potential of robotics to assist in real-world ecological challenges while fostering awareness of technology’s role in environmental stewardship.
 
-## System Overview
+## Physic Metrics
+The physical metric analyzed was the speed with which the robot moves toward the target, in this case a piece of trash placed in front of the camera at a distance of 1.25 meters. The times obtained were as follows:
+
+* 15 seconds for the fisrt test
+* 17 seconds for the second test
+* 10 seconds for the third test at 1 meter of distance
+
+With these times, we can calculate the average time and, with it, the average linear speed at which the robot moves. The average time is 14 seconds, so the linear speed, calculated using $s_{linear} = \frac{d}{t}$, gives us a speed of 0.0892 m/s.
+
+## System Overview for Simulation Metric
 
 - The robot is implemented using the `turtlesim` package in ROS and programmed in Python.  
 - A single virtual object (waste) is generated at a random position and assigned a fixed color.  
@@ -261,7 +270,7 @@ def run(self, trials=3):
         avg = sum(self.energy_used) / len(self.energy_used)
         print(f"Average energy: {avg:.2f}")
 ```
-Runs the cleaning process for a specified number of trials and prints the energy used.
+Runs the cleaning process for a specified number of trials and prints the energy used. To run this code, it is initialized using `roslaunch Water-Cleaning-Robot water_robot.launch`
 
 ## Energy Estimation
 
