@@ -283,7 +283,7 @@ The simulation evaluates the robot's performance by estimating its energy usage 
 
 ### *1st Attempt*
 
-![Energía gastada en la primera basura][1.jpg]
+![Energía gastada en la primera basura][/images/1.jpg]
 
 - Energy consumed: **77.09 units**
 
@@ -322,6 +322,3 @@ Future work may include introducing obstacles, dynamic targets, or even reinforc
 1. "Pérez, L., & Rodriguez, J. (2020). Autonomous Robots for Environmental Monitoring: A Review. Robotics and Autonomous Systems, 127, 103472.
 2. Wang, Y., & Lin, D. (2021). Simulation Environments for Robotics Education Using ROS and Turtlesim. International Journal of Engineering Education, 37(1), 55–62.
 3. United Nations. (2015). Transforming our World: The 2030 Agenda for Sustainable Development. Retrieved from https://sdgs.un.org/goals
-
-
-[1.jpg]: /practicas_lab/images/1.jpg
