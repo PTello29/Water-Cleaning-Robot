@@ -14,105 +14,100 @@ class EnergyRobot:
         self.spawn = rospy.ServiceProxy('/spawn', Spawn)
         self.kill = rospy.ServiceProxy('/kill', Kill)
         self.teleport = rospy.ServiceProxy('/turtle1/teleport_absolute', TeleportAbsolute)
-        self.set_pen = rospy.ServiceProxy('/turtle1/set_pen', SetPen)
         self.energy_used = []
 
     def update_pose(self, data):
         self.pose = data
 
     def reset_robot(self):
-        self.set_pen(0, 0, 0, 0, 1)
         self.teleport(1.0, 1.0, 0.0)
-        self.set_pen(255, 255, 255, 3, 0)
         rospy.sleep(1)
 
     def spawn_trash(self):
         x = random.uniform(2.0, 10.0)
         y = random.uniform(2.0, 10.0)
         self.spawn(x, y, 0, 'trash')
-        print(f"Trash spawned at position: x={x:.2f}, y={y:.2f}")  # Nuevo mensaje
+        print(f"Trash spawned at position: x={x:.2f}, y={y:.2f}")
         return (x, y)
-
-    def move_to(self, x_goal, y_goal):
-        vel = Twist()
-        rate = rospy.Rate(10)
-        k_linear = 0.5
-        k_angular = 3.0
-        start_time = time.perf_counter()
-        energy = 0.0
-
-        while not rospy.is_shutdown():
-            dx = x_goal - self.pose.x
-            dy = y_goal - self.pose.y
-            dist = sqrt(dx**2 + dy**2)
-
-            angle_to_goal = atan2(dy, dx)
-            angle_error = angle_to_goal - self.pose.theta
-            angle_error = (angle_error + pi) % (2 * pi) - pi  # Normalize
-
-            if dist < 0.1:
-                break
-
-            vel.linear.x = k_linear if abs(angle_error) < 0.1 else 0.0
-            vel.angular.z = k_angular * angle_error
-            self.vel_pub.publish(vel)
-
-            # Approximate energy = v² + w²
-            energy += pow(vel.linear.x, 2) + pow(vel.angular.z, 2)
-            rate.sleep()
-
-        vel.linear.x = 0
-        vel.angular.z = 0
-        self.vel_pub.publish(vel)
-        end_time = time.perf_counter()
-
-        total_energy = energy * (end_time - start_time) / 10
-        self.energy_used.append(total_energy)
-        self.kill("trash")
 
     def move_in_pattern(self):
         vel = Twist()
         rate = rospy.Rate(10)
-        step_size = 1.0  # Tamaño del paso en cada dirección
-        directions = [(0, step_size), (step_size, 0), (0, -step_size), (-step_size, 0)]  # Arriba, derecha, abajo, izquierda
         energy = 0.0
         start_time = time.perf_counter()
 
-        for dx, dy in directions:
-            target_x = self.pose.x + dx
-            target_y = self.pose.y + dy
+        # Definir los límites del mapa
+        x_min, x_max = 1.0, 10.0
+        y_min, y_max = 1.0, 10.0
+        step_size = 1.0  # Tamaño del paso en cada dirección
 
-            # Calcular el ángulo hacia el objetivo
-            angle_to_target = atan2(dy, dx)
+        # Comenzar desde la esquina inferior izquierda
+        current_x, current_y = x_min, y_min
+        moving_right = True  # Dirección inicial: derecha
 
-            # Girar hacia el ángulo deseado
+        while current_y <= y_max:
+            # Mover en la dirección actual (derecha o izquierda)
+            target_x = x_max if moving_right else x_min
+
+            # Girar hacia el objetivo en X
+            angle_to_target = 0 if moving_right else pi
             while not rospy.is_shutdown():
                 angle_error = angle_to_target - self.pose.theta
                 angle_error = (angle_error + pi) % (2 * pi) - pi  # Normalizar el ángulo
-
                 if abs(angle_error) < 0.1:  # Si el error angular es pequeño, detener la rotación
                     break
-
                 vel.linear.x = 0.0
                 vel.angular.z = 2.0 * angle_error  # Control proporcional para girar
                 self.vel_pub.publish(vel)
                 rate.sleep()
 
-            # Moverse hacia el objetivo
+            # Mover en X
             while not rospy.is_shutdown():
-                dist = sqrt((target_x - self.pose.x)**2 + (target_y - self.pose.y)**2)
-                if dist < 0.1:  # Si está cerca del objetivo, detenerse
+                dist = abs(target_x - self.pose.x)
+                if dist < 0.1:  # Si está cerca del objetivo en X, detenerse
                     break
-
-                vel.linear.x = 0.5  # Velocidad constante
-                vel.angular.z = 0.0  # Sin rotación
+                vel.linear.x = 0.5
+                vel.angular.z = 0.0
                 self.vel_pub.publish(vel)
-
-                # Aproximar energía = v²
                 energy += pow(vel.linear.x, 2)
                 rate.sleep()
 
-        # Detener la tortuga al final del patrón
+            # Detener el movimiento en X
+            vel.linear.x = 0
+            self.vel_pub.publish(vel)
+
+            # Subir una unidad en Y
+            current_y += step_size
+            if current_y > y_max:  # Si se sale del límite superior, detenerse
+                break
+
+            # Girar hacia el objetivo en Y
+            angle_to_target = pi / 2  # Apuntar hacia arriba
+            while not rospy.is_shutdown():
+                angle_error = angle_to_target - self.pose.theta
+                angle_error = (angle_error + pi) % (2 * pi) - pi  # Normalizar el ángulo
+                if abs(angle_error) < 0.1:  # Si el error angular es pequeño, detener la rotación
+                    break
+                vel.linear.x = 0.0
+                vel.angular.z = 2.0 * angle_error  # Control proporcional para girar
+                self.vel_pub.publish(vel)
+                rate.sleep()
+
+            # Mover en Y
+            while not rospy.is_shutdown():
+                dist = abs(current_y - self.pose.y)
+                if dist < 0.1:  # Si está cerca del objetivo en Y, detenerse
+                    break
+                vel.linear.x = 0.5
+                vel.angular.z = 0.0
+                self.vel_pub.publish(vel)
+                energy += pow(vel.linear.x, 2)
+                rate.sleep()
+
+            # Cambiar la dirección horizontal
+            moving_right = not moving_right
+
+        # Detener la tortuga al final del recorrido
         vel.linear.x = 0
         vel.angular.z = 0
         self.vel_pub.publish(vel)
@@ -120,7 +115,6 @@ class EnergyRobot:
 
         total_energy = energy * (end_time - start_time) / 10
         self.energy_used.append(total_energy)
-        self.kill("trash")
 
     def run(self, trials=3):
         for _ in range(trials):

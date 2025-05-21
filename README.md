@@ -282,6 +282,9 @@ This provides a **relative measure** of energy consumed during motion.
 The simulation evaluates the robot's performance by estimating its energy usage during motion. Instead of prioritizing time-to-completion, this approach emphasizes efficient pathing and movement strategy.
 
 ### *1st Attempt*
+
+![Energía gastada en la primera basura](/Images/1.jpg)
+
 - Energy consumed: **77.09 units**
 
 ### *2nd Attempt*
