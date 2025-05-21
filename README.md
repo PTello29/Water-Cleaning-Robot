@@ -312,9 +312,7 @@ Variation in energy use is primarily influenced by two factors:
 
 ![Energía gastada en la primera basura](/images/5.jpg)
 
-Shorter distances and near-perfect initial alignment result in lower energy usage. Higher angular corrections and longer paths significantly increase energy consumption.
-
-This demonstrates the importance of efficient orientation and accurate path planning in autonomous systems, especially when energy optimization is a priority.
+As can be seen in the graph, the angular adjustment (red) increases at first and decreases until it finds the object, and that's when the linear velocity is taken into account, since it is constant. Therefore, we can conclude that the greatest energy expenditure occurs when the robot has to make almost a 360° turn to find the trash, and on top of that, it's far from the object, which is logical to assume. Compared to tracing a programmed route that passes through the entire target area, this computer vision-based trash collection system turns out to be more energy efficient.
 
 ## Conclusions
 
